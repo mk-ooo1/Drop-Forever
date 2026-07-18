@@ -7,7 +7,7 @@ const AD_SLOT_MID    = "2222222222";
 const AD_SLOT_BTM    = "3333333333";
 const SITE_NAME      = "DropForever";
 const SITE_URL       = "https://my-app-chi-eight-73.vercel.app";
-const CONTACT_EMAIL  = "bg00998835@email.com";
+const CONTACT_EMAIL  = "bg00998835@gmail.com";
 // ──────────────────────────────────────────────────────────────────────────────
 
 function getMediatype(name) {
@@ -51,7 +51,24 @@ function Ad({ slot, format="auto" }) {
   }, []);
   if (ADSENSE_CLIENT === "ca-pub-XXXXXXXXXXXXXXXX") return null;
   return (
-    <div style={{margin:"14px 0",textAlign:"center",minHeight:60}}>
+    <div style={{
+      margin: "28px 0",
+      textAlign: "center",
+      minHeight: 60,
+      padding: "12px 0",
+      border: "1px solid #141414",
+      borderRadius: "4px",
+      background: "#0a0a0a",
+    }}>
+      <div style={{
+        fontSize: "9px",
+        letterSpacing: "0.16em",
+        textTransform: "uppercase",
+        color: "#333",
+        marginBottom: "8px",
+      }}>
+        Advertisement
+      </div>
       <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
         data-ad-client={ADSENSE_CLIENT} data-ad-slot={slot}
         data-ad-format={format} data-full-width-responsive="true" />
@@ -285,67 +302,19 @@ function Home() {
   }, [pick]);
 
   const upload = () => {
-  if (!file) return;
-  const access = ak.trim(), secret = sk.trim();
-  if (!access || !secret) { setErr("Enter your Archive.org API keys first."); return; }
+    if (!file) return;
+    const access = ak.trim(), secret = sk.trim();
+    if (!access || !secret) { setErr("Enter your Archive.org API keys first."); return; }
 
-  setUpl(true); setProg(0); setErr(null); setStat("Connecting...");
+    setUpl(true); setProg(0); setErr(null); setStat("Connecting...");
 
-  const identifier = `ds-${slug(file.name.replace(/\.[^.]+$/,""))}-${rid()}`;
-  const mt = getMediatype(file.name);
-  const isLocal = window.location.hostname === "localhost" ||
-                  window.location.hostname === "127.0.0.1";
+    const identifier = `ds-${slug(file.name.replace(/\.[^.]+$/,""))}-${rid()}`;
+    const mt = getMediatype(file.name);
 
-  const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/upload", true);         // ← goes through Vercel proxy
 
-  if (isLocal) {
-    // ── LOCAL DEV: upload directly to Archive.org ─────────────────
-    const iaUrl = `https://s3.us.archive.org/${identifier}/${encodeURIComponent(file.name)}`;
-    xhr.open("PUT", iaUrl, true);
-    xhr.setRequestHeader("Authorization",           `LOW ${access}:${secret}`);
-    xhr.setRequestHeader("Content-Type",            file.type || "application/octet-stream");
-    xhr.setRequestHeader("x-amz-auto-make-bucket",  "1");
-    xhr.setRequestHeader("x-archive-meta-mediatype", mt);
-    xhr.setRequestHeader("x-archive-queue-derive",   "0");
-    xhr.setRequestHeader("x-archive-meta-access",    "public");
-    xhr.setRequestHeader("x-archive-meta-title",     file.name);
-
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        setProg(Math.round((e.loaded / e.total) * 90));
-        setStat(`Uploading ${(e.loaded/1048576).toFixed(1)} MB / ${(e.total/1048576).toFixed(1)} MB...`);
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        setProg(100); setStat("Done!");
-        setTimeout(() => {
-          setRes({
-            downloadUrl: `https://archive.org/download/${identifier}/${encodeURIComponent(file.name)}`,
-            itemUrl:     `https://archive.org/details/${identifier}`,
-            name: file.name, size: file.size, mt
-          });
-          setUpl(false); setStat("");
-        }, 500);
-      } else {
-        const msg = xhr.status === 401 ? "Invalid API keys." :
-                    xhr.status === 403 ? "Access denied. Check Archive.org S3 is enabled on your account." :
-                    `Upload error (HTTP ${xhr.status}). Check your keys.`;
-        setErr(msg); setUpl(false); setProg(0); setStat("");
-      }
-    };
-
-    xhr.onerror = () => {
-      setErr("Direct upload blocked (CORS). Run 'vercel dev' instead of 'npm start' for local testing.");
-      setUpl(false); setProg(0); setStat("");
-    };
-
-    xhr.send(file);
-
-  } else {
-    // ── PRODUCTION: upload via Vercel proxy (/api/upload) ─────────
-    xhr.open("POST", "/api/upload", true);
+    // Send metadata as headers (not in body, to keep body = raw file)
     xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
     xhr.setRequestHeader("x-file-name",  file.name);
     xhr.setRequestHeader("x-identifier", identifier);
@@ -353,9 +322,11 @@ function Home() {
     xhr.setRequestHeader("x-ak",         access);
     xhr.setRequestHeader("x-sk",         secret);
 
+    // Track upload progress (browser → Vercel edge function)
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
-        setProg(Math.round((e.loaded / e.total) * 90));
+        const pct = Math.round((e.loaded / e.total) * 90);
+        setProg(pct);
         setStat(`Uploading ${(e.loaded/1048576).toFixed(1)} MB / ${(e.total/1048576).toFixed(1)} MB...`);
       }
     };
@@ -370,23 +341,22 @@ function Home() {
             setUpl(false); setStat("");
           }, 500);
         } else {
-          setErr(data.error || `Upload failed (HTTP ${xhr.status}).`);
+          setErr(data.error || `Upload failed (HTTP ${xhr.status}). Please try again.`);
           setUpl(false); setProg(0); setStat("");
         }
       } catch (_) {
-        setErr(`Unexpected error (HTTP ${xhr.status}).`);
+        setErr(`Unexpected response (HTTP ${xhr.status}). Please try again.`);
         setUpl(false); setProg(0); setStat("");
       }
     };
 
     xhr.onerror = () => {
-      setErr("Network error. Check your connection.");
+      setErr("Network error. Check your internet connection.");
       setUpl(false); setProg(0); setStat("");
     };
 
-    xhr.send(file);
-  }
-};
+    xhr.send(file);    // send raw file as body
+  };
 
   const copy = (text, key) => {
     navigator.clipboard.writeText(text);
@@ -445,8 +415,6 @@ function Home() {
             </div>
           </div>
         )}
-
-        {saved && <Ad slot={AD_SLOT_MID} />}
 
         {/* Upload area */}
         {!result ? (
@@ -528,6 +496,9 @@ function Home() {
             <div className="stat" key={l}><div className="sv">{v}</div><div className="sl">{l}</div></div>
           ))}
         </div>
+
+        {/* Ad placed well below all interactive elements — never near upload/download buttons */}
+        {saved && <Ad slot={AD_SLOT_MID} />}
         <Ad slot={AD_SLOT_BTM} format="horizontal" />
       </div>
     </div>
@@ -733,7 +704,7 @@ function Contact() {
             <div className="cf">
               <div className="cfr">
                 <div><div className="cfl">Name *</div><input className="cfi" placeholder="Your name" value={form.name} onChange={e=>h("name",e.target.value)} /></div>
-                <div><div className="cfl">Email *</div><input className="cfi" type="email" placeholder="bg00998835@email.com" value={form.email} onChange={e=>h("email",e.target.value)} /></div>
+                <div><div className="cfl">Email *</div><input className="cfi" type="email" placeholder="bg00998835@gmail.com" value={form.email} onChange={e=>h("email",e.target.value)} /></div>
               </div>
               <div><div className="cfl">Subject</div><input className="cfi" placeholder="What is this about?" value={form.subject} onChange={e=>h("subject",e.target.value)} /></div>
               <div><div className="cfl">Message *</div><textarea className="cft" placeholder="Your message..." value={form.message} onChange={e=>h("message",e.target.value)} /></div>
