@@ -69,7 +69,7 @@ function Ad({ slot, format="auto" }) {
         color: "#333",
         marginBottom: "8px",
       }}>
-        Advertisement
+        
       </div>
 
       {isPending ? (
@@ -86,7 +86,7 @@ function Ad({ slot, format="auto" }) {
           color: "#2a2a2a",
           letterSpacing: "0.05em",
         }}>
-          /* AdSense Placeholder — Replace with your real client/slot after approval */
+          
         </div>
       ) : (
         <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
