@@ -49,7 +49,9 @@ function Ad({ slot, format="auto" }) {
   useEffect(() => {
     try { if (window.adsbygoogle && ref.current) (window.adsbygoogle=[]).push({}); } catch(_){}
   }, []);
-  if (ADSENSE_CLIENT === "ca-pub-XXXXXXXXXXXXXXXX") return null;
+
+  const isPending = ADSENSE_CLIENT === "ca-pub-XXXXXXXXXXXXXXXX";
+
   return (
     <div style={{
       margin: "28px 0",
@@ -69,9 +71,28 @@ function Ad({ slot, format="auto" }) {
       }}>
         Advertisement
       </div>
-      <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
-        data-ad-client={ADSENSE_CLIENT} data-ad-slot={slot}
-        data-ad-format={format} data-full-width-responsive="true" />
+
+      {isPending ? (
+        // Placeholder box so you can preview layout/spacing before AdSense approval.
+        // Remove this block once ads are live — it's purely visual, no real ad code runs.
+        <div style={{
+          height: 90,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px dashed #222",
+          borderRadius: "3px",
+          fontSize: "10px",
+          color: "#2a2a2a",
+          letterSpacing: "0.05em",
+        }}>
+          Ad slot preview — real ad shows after AdSense approval
+        </div>
+      ) : (
+        <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
+          data-ad-client={ADSENSE_CLIENT} data-ad-slot={slot}
+          data-ad-format={format} data-full-width-responsive="true" />
+      )}
     </div>
   );
 }
