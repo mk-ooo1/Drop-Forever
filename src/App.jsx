@@ -69,7 +69,7 @@ function Ad({ slot, format="auto" }) {
         color: "#333",
         marginBottom: "8px",
       }}>
-        
+        Advertisement
       </div>
 
       {isPending ? (
@@ -86,7 +86,7 @@ function Ad({ slot, format="auto" }) {
           color: "#2a2a2a",
           letterSpacing: "0.05em",
         }}>
-          
+          Ad slot preview — real ad shows after AdSense approval
         </div>
       ) : (
         <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
@@ -391,8 +391,6 @@ function Home() {
   return (
     <div className="page">
       <div className="z">
-        <Ad slot={AD_SLOT_TOP} format="horizontal" />
-
         <div className="ey">// Permanent File Hosting — 100% Free</div>
         <div className="h1">DROP<s2>.</s2><br/>FOREVER<s2>.</s2></div>
         <div className="lead">Upload any file — APK, video, image, ZIP — get a download link that never expires.</div>
@@ -517,10 +515,6 @@ function Home() {
             <div className="stat" key={l}><div className="sv">{v}</div><div className="sl">{l}</div></div>
           ))}
         </div>
-
-        {/* Ad placed well below all interactive elements — never near upload/download buttons */}
-        {saved && <Ad slot={AD_SLOT_MID} />}
-        <Ad slot={AD_SLOT_BTM} format="horizontal" />
       </div>
     </div>
   );
@@ -651,7 +645,6 @@ function About() {
   return (
     <div className="page ip">
       <div className="z">
-        <Ad slot={AD_SLOT_TOP} format="horizontal" />
         <div className="ey">// About Us</div>
         <h1>About {SITE_NAME}</h1>
         <p className="upd">Free · Permanent · No Account Needed</p>
@@ -687,10 +680,10 @@ function About() {
           ))}
         </div>
 
+        <Ad slot={AD_SLOT_TOP} format="horizontal" />
+
         <h2>Privacy & Security</h2>
         <p>Your API keys are stored only in your browser and never sent to our servers. Files upload securely via HTTPS directly to Internet Archive.</p>
-
-        <Ad slot={AD_SLOT_BTM} format="horizontal" />
       </div>
     </div>
   );
