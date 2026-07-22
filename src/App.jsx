@@ -114,7 +114,12 @@ const css = `
   html{scroll-behavior:smooth}
   body{background:#080808;color:#dedad3;font-family:'Space Mono',monospace;font-size:13px;line-height:1.6}
 
-  nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.94);border-bottom:1px solid #141414;
+  /* Prevent Anchor Ad Overlap */
+  .adsbygoogle-noablate { z-index: 99 !important; }
+  html { padding-top: 0 !important; }
+  body { top: 0 !important; }
+
+  nav{position:sticky;top:0;z-index:1000;background:rgba(8,8,8,.94);border-bottom:1px solid #141414;
     backdrop-filter:blur(14px);padding:0 20px;display:flex;align-items:center;
     justify-content:space-between;height:52px}
   .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#dedad3;cursor:pointer;text-decoration:none}
@@ -127,7 +132,8 @@ const css = `
   .nl.on{color:#6366f1}
   .nc{background:#6366f1;color:#fff;border:none;font-family:'Space Mono',monospace;
     font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-    padding:7px 14px;border-radius:4px;cursor:pointer;transition:background .15s;margin-left:6px;text-decoration:none}
+    padding:7px 14px;border-radius:4px;cursor:pointer;transition:background .15s;margin-left:6px;
+    text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
   .nc:hover{background:#4f52d4}
 
   .page{min-height:calc(100vh - 52px);padding:38px 20px 64px;max-width:660px;margin:0 auto;position:relative}
