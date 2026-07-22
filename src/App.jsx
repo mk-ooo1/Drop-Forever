@@ -50,49 +50,59 @@ function Ad({ slot, format="auto" }) {
     try { if (window.adsbygoogle && ref.current) (window.adsbygoogle=[]).push({}); } catch(_){}
   }, []);
 
-  const isPending = ADSENSE_CLIENT === "ca-pub-XXXXXXXXXXXXXXXX" || ADSENSE_CLIENT.includes("X");
+  const isPending = ADSENSE_CLIENT === "ca-pub-3652630297983259" || ADSENSE_CLIENT.includes("X");
 
   return (
-    <div style={{
-      margin: "28px 0",
+    <div className="ad-container" style={{
+      margin: "60px 0",
       textAlign: "center",
-      minHeight: 60,
-      padding: "12px 0",
-      border: "1px solid #141414",
-      borderRadius: "4px",
-      background: "#0a0a0a",
+      minHeight: 120,
+      padding: "24px 0",
+      borderTop: "1px solid #1a1a1a",
+      borderBottom: "1px solid #1a1a1a",
+      background: "rgba(0,0,0,0.2)",
+      position: "relative"
     }}>
       <div style={{
-        fontSize: "9px",
-        letterSpacing: "0.16em",
+        fontSize: "10px",
+        letterSpacing: "0.25em",
         textTransform: "uppercase",
-        color: "#333",
-        marginBottom: "8px",
+        color: "#555",
+        marginBottom: "20px",
+        fontWeight: "bold"
       }}>
-        Advertisement
+        SPONSORED ADVERTISEMENT
       </div>
 
-      {isPending ? (
-        // Placeholder box so you can preview layout/spacing before AdSense approval.
-        // Remove this block once ads are live — it's purely visual, no real ad code runs.
-        <div style={{
-          height: 90,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px dashed #222",
-          borderRadius: "3px",
-          fontSize: "10px",
-          color: "#2a2a2a",
-          letterSpacing: "0.05em",
-        }}>
-          Ad slot preview — real ad shows after AdSense approval
-        </div>
-      ) : (
-        <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
-          data-ad-client={ADSENSE_CLIENT} data-ad-slot={slot}
-          data-ad-format={format} data-full-width-responsive="true" />
-      )}
+      <div style={{ padding: "0 10px" }}>
+        {isPending ? (
+          <div style={{
+            height: 90,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "1px dashed #222",
+            borderRadius: "4px",
+            fontSize: "10px",
+            color: "#333",
+          }}>
+            Ad Placement Area
+          </div>
+        ) : (
+          <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
+            data-ad-client={ADSENSE_CLIENT} data-ad-slot={slot}
+            data-ad-format={format} data-full-width-responsive="true" />
+        )}
+      </div>
+
+      <div style={{
+        marginTop: "12px",
+        fontSize: "9px",
+        color: "#222",
+        letterSpacing: "0.05em"
+      }}>
+        The content above is an advertisement.
+      </div>
     </div>
   );
 }
@@ -107,17 +117,17 @@ const css = `
   nav{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.94);border-bottom:1px solid #141414;
     backdrop-filter:blur(14px);padding:0 20px;display:flex;align-items:center;
     justify-content:space-between;height:52px}
-  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#dedad3;cursor:pointer}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#dedad3;cursor:pointer;text-decoration:none}
   .logo span{color:#6366f1}
   .nav-r{display:flex;gap:0;align-items:center}
   .nl{background:none;border:none;color:#4a4a4a;font-family:'Space Mono',monospace;
     font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
-    padding:6px 11px;border-radius:3px;transition:color .15s}
+    padding:6px 11px;border-radius:3px;transition:color .15s;text-decoration:none}
   .nl:hover{color:#818cf8}
   .nl.on{color:#6366f1}
   .nc{background:#6366f1;color:#fff;border:none;font-family:'Space Mono',monospace;
     font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-    padding:7px 14px;border-radius:4px;cursor:pointer;transition:background .15s;margin-left:6px}
+    padding:7px 14px;border-radius:4px;cursor:pointer;transition:background .15s;margin-left:6px;text-decoration:none}
   .nc:hover{background:#4f52d4}
 
   .page{min-height:calc(100vh - 52px);padding:38px 20px 64px;max-width:660px;margin:0 auto;position:relative}
@@ -142,9 +152,9 @@ const css = `
   .badge::before{content:'';width:5px;height:5px;border-radius:50%;background:#6366f1;box-shadow:0 0 6px #6366f1}
 
   /* Cards */
-  .card{background:#0d0d0d;border:1px solid #1c1c1c;border-radius:6px;padding:18px 20px;margin-bottom:12px}
-  .ct{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#6366f1;margin-bottom:12px;
-    display:flex;align-items:center;justify-content:space-between}
+  .card{background:#0d0d0d;border:1px solid #1c1c1c;border-radius:6px;padding:24px;margin-bottom:24px}
+  .ct{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px;
+    display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #141414;padding-bottom:10px}
   .ct a{color:#3a3a3a;font-size:9px;text-decoration:none;border-bottom:1px solid #272727;
     padding-bottom:1px;transition:color .15s}
   .ct a:hover{color:#818cf8}
@@ -281,7 +291,7 @@ const css = `
   footer{background:#040404;border-top:1px solid #0e0e0e;padding:22px 20px;text-align:center}
   .fl{display:flex;gap:0;justify-content:center;flex-wrap:wrap;margin-bottom:9px}
   .flk{background:none;border:none;color:#2a2a2a;font-family:'Space Mono',monospace;
-    font-size:10px;letter-spacing:.08em;cursor:pointer;padding:4px 10px;transition:color .15s}
+    font-size:10px;letter-spacing:.08em;cursor:pointer;padding:4px 10px;transition:color .15s;text-decoration:none}
   .flk:hover{color:#6366f1}
   .fc{font-size:10px;color:#1e1e1e;letter-spacing:.06em}
   .fc a{color:#2a2a2a;text-decoration:none}
@@ -496,9 +506,16 @@ function Home() {
               </button>
             </div>
             <div className="acts">
-              <a href={result.downloadUrl} target="_blank" rel="noreferrer" className="act ap">↗ Download</a>
-              <a href={result.itemUrl} target="_blank" rel="noreferrer" className="act ap">☰ Archive Page</a>
-              <button className="act as" onClick={reset}>+ New Upload</button>
+              <a href={result.downloadUrl} target="_blank" rel="noreferrer" className="act ap">↗ Download File</a>
+              <a href={result.itemUrl} target="_blank" rel="noreferrer" className="act ap">☰ View on Archive.org</a>
+            </div>
+
+            <div style={{margin: "40px 0"}}>
+               <div style={{height: "1px", background: "#1a1a1a"}} />
+            </div>
+
+            <div className="as-wrap" style={{textAlign: "center"}}>
+               <button className="act as" onClick={reset} style={{display: "inline-block", width: "auto", padding: "10px 30px"}}>+ Upload Another File</button>
             </div>
             <div className="pn">
               ⏳ <b>Wait 1–5 minutes</b> before clicking the link — Archive.org needs a moment to register new items. If it shows "not available", wait briefly and refresh.
@@ -751,10 +768,19 @@ function Contact() {
 // ROOT APP
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function App() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState(() => window.location.hash.replace("#/","") || "home");
 
   useEffect(() => {
-    if (ADSENSE_CLIENT === "ca-pub-XXXXXXXXXXXXXXXX") return;
+    const handleHash = () => {
+      const h = window.location.hash.replace("#/","") || "home";
+      setPage(h);
+    };
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
+  useEffect(() => {
+    if (ADSENSE_CLIENT.includes("X")) return;
     if (document.querySelector("script[data-ads]")) return;
     const s = document.createElement("script");
     s.async = true;
@@ -773,12 +799,12 @@ export default function App() {
       <div className="bl bl1"/><div className="bl bl2"/>
 
       <nav>
-        <div className="logo" onClick={()=>setPage("home")}>Drop<span>.</span>Forever</div>
+        <a href="#/" className="logo">Drop<span>.</span>Forever</a>
         <div className="nav-r">
           {[["home","Home"],["about","About"],["contact","Contact"]].map(([k,l])=>(
-            <button key={k} className={"nl"+(page===k?" on":"")} onClick={()=>setPage(k)}>{l}</button>
+            <a key={k} href={`#/${k}`} className={"nl"+(page===k?" on":"")}>{l}</a>
           ))}
-          <button className="nc" onClick={()=>setPage("home")}>Upload Free</button>
+          <a href="#/home" className="nc">Upload Free</a>
         </div>
       </nav>
 
@@ -791,7 +817,7 @@ export default function App() {
       <footer>
         <div className="fl">
           {[["home","Home"],["about","About"],["contact","Contact"],["privacy","Privacy Policy"],["terms","Terms of Service"]].map(([k,l])=>(
-            <button key={k} className="flk" onClick={()=>setPage(k)}>{l}</button>
+            <a key={k} href={`#/${k}`} className="flk">{l}</a>
           ))}
         </div>
         <div className="fc">© {new Date().getFullYear()} {SITE_NAME} · <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></div>
