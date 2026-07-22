@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
 // ── Replace with your real values after AdSense approval ──────────────────────
-const ADSENSE_CLIENT = "ca-pub-XXXXXXXXXXXXXXXX";
+const ADSENSE_CLIENT = "ca-pub-3652630297983259";
 const AD_SLOT_TOP    = "1111111111";
 const AD_SLOT_MID    = "2222222222";
 const AD_SLOT_BTM    = "3333333333";
@@ -50,7 +50,7 @@ function Ad({ slot, format="auto" }) {
     try { if (window.adsbygoogle && ref.current) (window.adsbygoogle=[]).push({}); } catch(_){}
   }, []);
 
-  const isPending = ADSENSE_CLIENT === "ca-pub-XXXXXXXXXXXXXXXX";
+  const isPending = ADSENSE_CLIENT === "ca-pub-XXXXXXXXXXXXXXXX" || ADSENSE_CLIENT.includes("X");
 
   return (
     <div style={{
