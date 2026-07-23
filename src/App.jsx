@@ -3,7 +3,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 // ── Replace with your real values after AdSense approval ──────────────────────
 const ADSENSE_CLIENT = "ca-pub-3652630297983259";
 const AD_SLOT_TOP    = "1111111111";
-const AD_SLOT_MID    = "2222222222";
+const AD_SLOT_MID    = "9582325592";
 const AD_SLOT_BTM    = "3333333333";
 const SITE_NAME      = "DropForever";
 const SITE_URL       = "https://my-app-chi-eight-73.vercel.app";
@@ -44,7 +44,7 @@ function rid()   { return Math.random().toString(36).slice(2,8); }
 function today() { return new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}); }
 
 // ── AdSense component ──────────────────────────────────────────────────────────
-function Ad({ slot, format="auto" }) {
+function Ad({ slot, format="auto", layout }) {
   const ref = useRef();
   useEffect(() => {
     try { if (window.adsbygoogle && ref.current) (window.adsbygoogle=[]).push({}); } catch(_){}
@@ -89,9 +89,12 @@ function Ad({ slot, format="auto" }) {
             Ad Placement Area
           </div>
         ) : (
-          <ins ref={ref} className="adsbygoogle" style={{display:"block"}}
-            data-ad-client={ADSENSE_CLIENT} data-ad-slot={slot}
-            data-ad-format={format} data-full-width-responsive="true" />
+          <ins ref={ref} className="adsbygoogle" style={{display:"block", textAlign:"center"}}
+            data-ad-client={ADSENSE_CLIENT}
+            data-ad-slot={slot}
+            data-ad-format={format}
+            data-ad-layout={layout}
+            data-full-width-responsive={layout ? "false" : "true"} />
         )}
       </div>
 
@@ -522,7 +525,7 @@ function Home() {
           <h2>Safe & Anonymous</h2>
           <p>We believe in privacy. Your API keys are stored locally in your browser's memory and are never transmitted to our servers. The connection between your browser and the storage vault is encrypted via industrial-grade SSL/TLS protocols.</p>
 
-          <Ad slot={AD_SLOT_MID} />
+          <Ad slot={AD_SLOT_MID} layout="in-article" format="fluid" />
 
           <h2>Technical Specifications</h2>
           <ul>
