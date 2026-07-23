@@ -349,9 +349,8 @@ function Home() {
     const mt = getMediatype(file.name);
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/upload", true);         // ← goes through Vercel proxy
+    xhr.open("POST", "/api/upload", true);
 
-    // Send metadata as headers (not in body, to keep body = raw file)
     xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
     xhr.setRequestHeader("x-file-name",  file.name);
     xhr.setRequestHeader("x-identifier", identifier);
@@ -359,7 +358,6 @@ function Home() {
     xhr.setRequestHeader("x-ak",         access);
     xhr.setRequestHeader("x-sk",         secret);
 
-    // Track upload progress (browser → Vercel edge function)
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
         const pct = Math.round((e.loaded / e.total) * 90);
@@ -392,7 +390,7 @@ function Home() {
       setUpl(false); setProg(0); setStat("");
     };
 
-    xhr.send(file);    // send raw file as body
+    xhr.send(file);
   };
 
   const copy = (text, key) => {
@@ -433,23 +431,6 @@ function Home() {
           {rdy && !saved && <button className="btn" onClick={saveKeys}>Save Keys</button>}
           {saved && <div className="kok">✓ Keys saved — ready to upload</div>}
         </div>
-
-        {/* Guide */}
-        {!saved && (
-          <div className="guide">
-            <div className="gt">// How to get free API keys (2 min)</div>
-            <div className="steps">
-              {[
-                <>Create a free account at <a href="https://archive.org/account/login.createaccount.php" target="_blank" rel="noreferrer">archive.org</a></>,
-                <>Go to <a href="https://archive.org/account/s3.php" target="_blank" rel="noreferrer">archive.org/account/s3.php</a> — copy your S3 keys</>,
-                <>Paste Access Key + Secret Key above → click Save Keys</>,
-                <>Upload any file — APK, video, zip — link works forever</>,
-              ].map((t,i)=>(
-                <div className="step" key={i}><div className="sn">{i+1}</div><div className="st">{t}</div></div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Upload area */}
         {!result ? (
@@ -526,11 +507,31 @@ function Home() {
             <div className="pn">
               ⏳ <b>Wait 1–5 minutes</b> before clicking the link — Archive.org needs a moment to register new items. If it shows "not available", wait briefly and refresh.
             </div>
-            <div className="en">
-              ♾ <b>This link never expires.</b> No download requirements, no inactivity rules, no time limits. Ever.
-            </div>
           </div>
         )}
+
+        <div style={{marginTop: 60}} className="ip">
+          <h2>Why use Permanent Hosting?</h2>
+          <p>Most file-sharing services delete your files after 30 days of inactivity. DropForever is built on the Internet Archive's S3 infrastructure, meaning your files are stored in a non-profit library designed to last for decades, not days.</p>
+
+          <div className="card">
+            <div className="ct"><span>// Digital Preservation</span></div>
+            <p style={{fontSize: 11, color: '#666'}}>When you upload a file here, it is assigned a unique identifier in the Global Data Vault. This is ideal for developers hosting open-source software, researchers sharing datasets, or creators preserving their digital legacy.</p>
+          </div>
+
+          <h2>Safe & Anonymous</h2>
+          <p>We believe in privacy. Your API keys are stored locally in your browser's memory and are never transmitted to our servers. The connection between your browser and the storage vault is encrypted via industrial-grade SSL/TLS protocols.</p>
+
+          <Ad slot={AD_SLOT_MID} />
+
+          <h2>Technical Specifications</h2>
+          <ul>
+            <li><strong>Protocol:</strong> S3-Compatible API via Archive.org</li>
+            <li><strong>Storage Type:</strong> Distributed Web (Non-Profit)</li>
+            <li><strong>Redundancy:</strong> Multi-regional data replication</li>
+            <li><strong>Access:</strong> Public domain / Creative Commons attribution</li>
+          </ul>
+        </div>
 
         <div className="dv"><div className="dl2"/><div className="dt">Internet Archive · archive.org · Est. 1996</div><div className="dl2"/></div>
         <div className="stats">
