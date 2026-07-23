@@ -50,7 +50,7 @@ function Ad({ slot, format="auto", layout }) {
     try { if (window.adsbygoogle && ref.current) (window.adsbygoogle=[]).push({}); } catch(_){}
   }, []);
 
-  const isPending = ADSENSE_CLIENT === "ca-pub-3652630297983259" || ADSENSE_CLIENT.includes("X");
+  const isPending = ADSENSE_CLIENT.includes("X");
 
   return (
     <div className="ad-container" style={{
